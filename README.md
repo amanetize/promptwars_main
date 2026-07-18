@@ -4,6 +4,8 @@
 
 **Brohab is not just a chatbot.** It is a cohesive, data-grounded system that connects your real-world habit logs to an interactive ecosystem. Every event logged shapes your profile, informs the coach, determines the timing of real-time nudges, and drives personalized behavioural insights. If you ever mention a crisis word, the coach immediately shows a dedicated safety/support panel. No artificial delays, no black-box retries—just direct, structured support.
 
+**[Live Demo](https://promptwars-main-5fpb.onrender.com)**
+
 ---
 
 ## The 30-second demo
