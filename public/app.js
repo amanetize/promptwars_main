@@ -32,6 +32,11 @@ const intentionsError = document.getElementById('intentions-error');
 
 const supportResourcesList = document.getElementById('support-resources-list');
 
+const heroStreak = document.getElementById('hero-streak');
+const heroCompletion = document.getElementById('hero-completion');
+const heroStage = document.getElementById('hero-stage');
+const heroTrigger = document.getElementById('hero-trigger');
+
 let habitTypes = [];
 let currentHabitType = null;
 
@@ -87,7 +92,23 @@ function clearResult(el) {
   el.innerHTML = '';
 }
 
+function updateHeroStats(state) {
+  if (!state) {
+    heroStreak.textContent = '—';
+    heroCompletion.textContent = '—';
+    heroStage.textContent = '—';
+    heroTrigger.textContent = '—';
+    return;
+  }
+  heroStreak.textContent = `${state.currentRunDays} day${state.currentRunDays === 1 ? '' : 's'}`;
+  heroCompletion.textContent = state.completionRate ? state.completionRate.label : 'N/A';
+  heroStage.textContent = state.stageOfChange || '—';
+  heroTrigger.textContent = state.topTriggers[0]?.trigger || 'None yet';
+}
+
 function renderProgress(state) {
+  updateHeroStats(state);
+
   if (!state) {
     progressEmpty.hidden = false;
     progressStats.hidden = true;
@@ -244,6 +265,27 @@ async function loadSupportResources() {
     supportResourcesList.innerHTML = '<li>Support resources are temporarily unavailable.</li>';
   }
 }
+
+const sampleDataBtn = document.getElementById('sample-data-btn');
+const sampleDataStatus = document.getElementById('sample-data-status');
+
+sampleDataBtn.addEventListener('click', async () => {
+  sampleDataBtn.disabled = true;
+  sampleDataStatus.textContent = 'Loading sample data…';
+  try {
+    const data = await fetchJson('/api/sample-data', { method: 'POST' });
+    const { events, intentions, telemetryEvents, messages } = data.seeded;
+    sampleDataStatus.textContent = `Loaded ${events} entries, ${intentions} plans, ${telemetryEvents} telemetry points, ${messages} coach messages.`;
+    clearResult(nudgeResult);
+    clearResult(insightResult);
+    await refreshProgress();
+    await loadIntentions();
+  } catch (err) {
+    sampleDataStatus.textContent = err.message;
+  } finally {
+    sampleDataBtn.disabled = false;
+  }
+});
 
 habitSelect.addEventListener('change', onHabitChanged);
 

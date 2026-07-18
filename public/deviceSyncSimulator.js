@@ -15,12 +15,6 @@ simEventType.addEventListener('change', () => {
   simValueLabel.textContent = VALUE_LABELS[simEventType.value];
 });
 
-function escapeHtml(value) {
-  const div = document.createElement('div');
-  div.textContent = String(value);
-  return div.innerHTML;
-}
-
 simForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   simError.textContent = '';

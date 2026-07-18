@@ -1,9 +1,3 @@
-function escapeHtml(value) {
-  const div = document.createElement('div');
-  div.textContent = String(value);
-  return div.innerHTML;
-}
-
 // Mood is categorical, not a quantity, so this renders labeled chips (the
 // mood name is always visible text, never color-only) rather than
 // fabricating a bar height for data with no real magnitude. A text table

@@ -12,6 +12,7 @@ import { HABIT_TYPES } from './src/habitTypes.js';
 
 import { createEventsHandlers } from './src/tracking/eventsRoute.js';
 import { createStateHandlers } from './src/tracking/stateRoute.js';
+import { createSampleDataHandlers } from './src/tracking/sampleDataRoute.js';
 import { createIntentionsHandlers } from './src/intentions/intentionsRoute.js';
 import { createTelemetryHandlers } from './src/telemetry/telemetryRoute.js';
 import { createNudgeHandler } from './src/nudges/nudgeRoute.js';
@@ -63,6 +64,9 @@ app.get('/api/events', eventsHandlers.getEvents);
 const stateHandlers = createStateHandlers({ db });
 app.get('/api/state', stateHandlers.getState);
 app.patch('/api/state', stateHandlers.patchState);
+
+const sampleDataHandlers = createSampleDataHandlers({ db });
+app.post('/api/sample-data', sampleDataHandlers.postSeed);
 
 const intentionsHandlers = createIntentionsHandlers({ db });
 app.post('/api/intentions', intentionsHandlers.postIntention);
