@@ -540,6 +540,17 @@ a:focus-visible {
   transform: translateY(-1px);
 }
 
+.btn--danger-ghost {
+  background: rgba(244, 63, 94, 0.06);
+  color: var(--error);
+  border-color: rgba(244, 63, 94, 0.2);
+}
+.btn--danger-ghost:not(:disabled):hover {
+  background: rgba(244, 63, 94, 0.12);
+  border-color: rgba(244, 63, 94, 0.35);
+  transform: translateY(-1px);
+}
+
 .error {
   color: var(--error);
   font-weight: 600;

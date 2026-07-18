@@ -90,3 +90,20 @@ test('re-seeding clears existing data (no accumulation)', () => {
   assert.equal(markerRows, 0, 'a second seed must clear the user’s prior rows first');
   db.close();
 });
+
+test('deleteSeed clears all user data', () => {
+  const { db, handlers } = setup();
+  handlers.postSeed({ userId: 'demo-user' }, mockRes());
+  
+  const res = mockRes();
+  handlers.deleteSeed({ userId: 'demo-user' }, res);
+  
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.ok, true);
+  
+  const eventsCount = db.prepare("SELECT COUNT(*) AS n FROM habit_events WHERE user_id = 'demo-user'").get().n;
+  const intentionsCount = db.prepare("SELECT COUNT(*) AS n FROM implementation_intentions WHERE user_id = 'demo-user'").get().n;
+  assert.equal(eventsCount, 0);
+  assert.equal(intentionsCount, 0);
+  db.close();
+});

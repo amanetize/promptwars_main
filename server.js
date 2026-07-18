@@ -67,6 +67,7 @@ app.patch('/api/state', stateHandlers.patchState);
 
 const sampleDataHandlers = createSampleDataHandlers({ db });
 app.post('/api/sample-data', sampleDataHandlers.postSeed);
+app.delete('/api/sample-data', sampleDataHandlers.deleteSeed);
 
 const intentionsHandlers = createIntentionsHandlers({ db });
 app.post('/api/intentions', intentionsHandlers.postIntention);

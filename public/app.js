@@ -267,10 +267,12 @@ async function loadSupportResources() {
 }
 
 const sampleDataBtn = document.getElementById('sample-data-btn');
+const clearDataBtn = document.getElementById('clear-data-btn');
 const sampleDataStatus = document.getElementById('sample-data-status');
 
 sampleDataBtn.addEventListener('click', async () => {
   sampleDataBtn.disabled = true;
+  clearDataBtn.disabled = true;
   sampleDataStatus.textContent = 'Loading sample data…';
   try {
     const data = await fetchJson('/api/sample-data', { method: 'POST' });
@@ -280,10 +282,37 @@ sampleDataBtn.addEventListener('click', async () => {
     clearResult(insightResult);
     await refreshProgress();
     await loadIntentions();
+    if (window.loadCoachHistory) await window.loadCoachHistory();
   } catch (err) {
     sampleDataStatus.textContent = err.message;
   } finally {
     sampleDataBtn.disabled = false;
+    clearDataBtn.disabled = false;
+  }
+});
+
+clearDataBtn.addEventListener('click', async () => {
+  sampleDataBtn.disabled = true;
+  clearDataBtn.disabled = true;
+  sampleDataStatus.textContent = 'Clearing user data…';
+  try {
+    await fetchJson('/api/sample-data', { method: 'DELETE' });
+    sampleDataStatus.textContent = 'All data cleared.';
+    clearResult(nudgeResult);
+    clearResult(insightResult);
+    
+    // Clear coach chat visually
+    const coachLog = document.getElementById('coach-log');
+    if (coachLog) coachLog.innerHTML = '';
+    
+    await refreshProgress();
+    await loadIntentions();
+    if (window.loadCoachHistory) await window.loadCoachHistory();
+  } catch (err) {
+    sampleDataStatus.textContent = err.message;
+  } finally {
+    sampleDataBtn.disabled = false;
+    clearDataBtn.disabled = false;
   }
 });
 

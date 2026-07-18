@@ -65,4 +65,5 @@ coachForm.addEventListener('submit', async (event) => {
   }
 });
 
+window.loadCoachHistory = loadCoachHistory;
 loadCoachHistory();
