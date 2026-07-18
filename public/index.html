@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brohab — The Habit Bro</title>
+  <meta name="description" content="Brohab (The Habit Bro) — a GenAI habit bro that helps you break bad habits: personalized tracking, adaptive coaching, intelligent nudges, and support." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <h1>Brohab</h1>
+          <p class="tagline">The Habit Bro</p>
+          <p class="subtitle">Track a habit, get real-time nudges, chat with your habit bro, and see the patterns behind your behavior.</p>
+        </div>
+      </div>
+      <div class="habit-switcher">
+        <label for="habit-select">Focus habit</label>
+        <select id="habit-select"></select>
+        <div class="field field--inline" id="custom-label-field" hidden>
+          <label for="custom-label-input">Name this habit</label>
+          <input type="text" id="custom-label-input" maxlength="100" placeholder="e.g. nail biting" />
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="card card--banner" aria-labelledby="nudge-heading">
+        <div class="banner-row">
+          <div>
+            <h2 id="nudge-heading">Nudge</h2>
+            <p class="card-hint">A short, real-time, LLM-generated nudge based on your actual logged data.</p>
+          </div>
+          <button id="nudge-btn" type="button" class="btn btn--primary">Get a nudge</button>
+        </div>
+        <div id="nudge-result" aria-live="polite" class="result-box"></div>
+      </section>
+
+      <div class="layout-grid">
+        <div class="layout-col layout-col--side">
+          <section aria-labelledby="log-heading" class="card">
+            <h2 id="log-heading">Log an entry</h2>
+            <form id="log-form">
+              <div class="field-row">
+                <div class="field">
+                  <label for="log-value" id="log-value-label">Amount</label>
+                  <input type="number" id="log-value" min="0" required />
+                </div>
+                <div class="field">
+                  <label for="log-mood">Mood</label>
+                  <select id="log-mood">
+                    <option value="">(none)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="log-trigger">Trigger (optional)</label>
+                <input type="text" id="log-trigger" maxlength="200" placeholder="e.g. boredom, stress, notification" />
+              </div>
+              <div class="field">
+                <label for="log-notes">Notes (optional)</label>
+                <textarea id="log-notes" rows="2" maxlength="1000"></textarea>
+              </div>
+              <button type="submit" class="btn btn--primary">Log entry</button>
+              <p id="log-error" class="error" role="alert"></p>
+              <p id="log-status" class="status-message" role="status"></p>
+            </form>
+          </section>
+
+          <section aria-labelledby="progress-heading" class="card">
+            <h2 id="progress-heading">Your progress</h2>
+            <div id="progress-content" aria-live="polite">
+              <p id="progress-empty">No entries logged yet for this habit.</p>
+              <dl id="progress-stats" class="stats-grid" hidden></dl>
+              <div id="mood-chart-wrapper" hidden>
+                <h3>Recent mood trend</h3>
+                <div id="mood-chart" role="img" aria-label="Bar chart of recent mood entries by day"></div>
+                <table class="visually-hidden-unless-focused" id="mood-chart-table">
+                  <caption>Recent mood entries by day (text alternative to the chart above)</caption>
+                  <thead><tr><th scope="col">Day</th><th scope="col">Mood</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="layout-col layout-col--main">
+          <section aria-labelledby="coach-heading" class="card card--chat">
+            <h2 id="coach-heading">Coach chat</h2>
+            <div id="coach-crisis-panel" role="alert" class="crisis-panel" hidden>
+              <h3>Support Resources</h3>
+              <ul id="crisis-resources-list"></ul>
+            </div>
+            <div id="coach-log" aria-live="polite" class="coach-log"></div>
+            <form id="coach-form">
+              <div class="field">
+                <label for="coach-input">Message the coach</label>
+                <textarea id="coach-input" rows="2" maxlength="2000" required></textarea>
+              </div>
+              <button type="submit" class="btn btn--primary">Send</button>
+              <p id="coach-error" class="error" role="alert"></p>
+            </form>
+          </section>
+        </div>
+      </div>
+
+      <div class="layout-grid layout-grid--secondary">
+        <section aria-labelledby="insight-heading" class="card">
+          <h2 id="insight-heading">Pattern insight</h2>
+          <p class="card-hint">One data-grounded observation about your behavior, generated on demand.</p>
+          <button id="insight-btn" type="button" class="btn btn--secondary">Show me my patterns</button>
+          <div id="insight-result" aria-live="polite" class="result-box"></div>
+        </section>
+
+        <section aria-labelledby="intentions-heading" class="card">
+          <h2 id="intentions-heading">If-then plans</h2>
+          <ul id="intentions-list" class="intentions-list"></ul>
+          <form id="intentions-form">
+            <div class="field">
+              <label for="intention-trigger">If this happens...</label>
+              <input type="text" id="intention-trigger" maxlength="300" required placeholder="e.g. I feel the urge to check my phone in bed" />
+            </div>
+            <div class="field">
+              <label for="intention-action">...then I will</label>
+              <input type="text" id="intention-action" maxlength="300" required placeholder="e.g. put my phone across the room" />
+            </div>
+            <button type="submit" class="btn btn--secondary">Add plan</button>
+            <p id="intentions-error" class="error" role="alert"></p>
+          </form>
+        </section>
+      </div>
+
+      <section aria-labelledby="support-heading" class="card card--muted">
+        <h2 id="support-heading">Support</h2>
+        <p>This coach is a supportive tool, not a licensed therapist or medical provider.</p>
+        <ul id="support-resources-list"></ul>
+      </section>
+    </main>
+
+    <footer>
+      <p><a href="deviceSyncSimulator.html">Device Sync Simulator (Demo Mode)</a> — a separate demo tool showing how a real phone/wearable companion app would sync telemetry. Not part of the core product experience.</p>
+    </footer>
+  </div>
+
+  <script src="charts.js"></script>
+  <script src="app.js"></script>
+  <script src="coach.js"></script>
+  <script src="pageVisibilityTracker.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Device Sync Simulator (Demo Mode) — Brohab</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <h1>Device Sync Simulator</h1>
+          <p class="subtitle"><a href="index.html">&larr; Back to Brohab</a></p>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="card card--banner" aria-labelledby="demo-banner-heading">
+        <h2 id="demo-banner-heading">Demo Mode — this is not live hardware</h2>
+        <p>
+          In production, this app is designed for a real mobile/wearable companion app to sync telemetry
+          (app usage, screen time, sleep, activity) to the <code>POST /api/telemetry/sync</code> endpoint using
+          platform APIs such as Android <code>UsageStatsManager</code>, iOS Screen Time, or Apple HealthKit / Health Connect.
+        </p>
+        <p>
+          No such native app exists in this hackathon build. This page calls the <strong>same real endpoint</strong>
+          a real device would use, so you can exercise the full coaching/nudge/insight pipeline end-to-end. Every
+          entry submitted here becomes a genuine stored row — the AI features that read it always make a real,
+          fresh model call over whatever is in the database.
+        </p>
+        <p>See the README's "Device Sync: Design &amp; Demo Note" section for the full data-point list and what's implemented vs. documented-only.</p>
+      </section>
+
+      <section class="card" aria-labelledby="sim-form-heading">
+        <h2 id="sim-form-heading">Send a simulated sync event</h2>
+        <form id="sim-form">
+          <div class="field">
+            <label for="sim-event-type">Event type</label>
+            <select id="sim-event-type">
+              <option value="app_usage_summary">App usage summary (minutes)</option>
+              <option value="device_charging_session">Charging session (minutes) — sleep-window proxy</option>
+              <option value="step_count">Step count</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sim-value" id="sim-value-label">Minutes</label>
+            <input type="number" id="sim-value" min="0" required />
+          </div>
+          <button type="submit" class="btn btn--primary">Send simulated sync</button>
+          <p id="sim-error" class="error" role="alert"></p>
+          <div id="sim-result" aria-live="polite" class="result-box"></div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="deviceSyncSimulator.js"></script>
+</body>
+</html>
